@@ -25,7 +25,7 @@ app.all('/*', function (req, res) {
   if(body.Symbol && body.Action){
     api_helper
       .make_API_call(
-        `https://api.telegram.org/bot5722926850:AAFX2xfA2wJx7M6LqhT7ecZTsV2Nxk36UW4/sendMessage?chat_id=-1001160051994&text=${body.Action}https://www.tradingview.com/chart/?symbol=BINANCE%3A${body.Symbol}`
+        `https://api.telegram.org/bot5722926850:AAFX2xfA2wJx7M6LqhT7ecZTsV2Nxk36UW4/sendMessage?chat_id=-1001160051994&text=${body.Symbol}-${body.Action}=https://www.tradingview.com/chart/?symbol=BINANCE%3A${body.Symbol}`
       )
       .then((response) => {
         // res.json(response);
