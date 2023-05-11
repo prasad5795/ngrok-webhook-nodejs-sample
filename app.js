@@ -22,24 +22,26 @@ app.all('/*', function (req, res) {
   // console.log("Headers:"+ JSON.stringify(req.headers, null, 3));
   console.log('Body:' + JSON.stringify(req.body, null, 3));
   const body = req.body;
-  api_helper
-    .make_API_call(
-      `https://api.telegram.org/bot5722926850:AAFX2xfA2wJx7M6LqhT7ecZTsV2Nxk36UW4/sendMessage?chat_id=-1001160051994&text=${body.Symbol}-${body.Action}`
-    )
-    .then((response) => {
-      // res.json(response);
-      console.log(
-         '============successfully sent the alert to tg============',
-        JSON.stringify(req.body, null, 3)
-      );
-    })
-    .catch((error) => {
-      console.error(
-        '============Failed sent the alert to tg============',
-        JSON.stringify(req.body, null, 3)
-      );
-      // res.send(error);
-    });
+  if(body.Symbol && body.Action){
+    api_helper
+      .make_API_call(
+        `https://api.telegram.org/bot5722926850:AAFX2xfA2wJx7M6LqhT7ecZTsV2Nxk36UW4/sendMessage?chat_id=-1001160051994&text=${body.Symbol}-${body.Action}`
+      )
+      .then((response) => {
+        // res.json(response);
+        console.log(
+           '============successfully sent the alert to tg============',
+          JSON.stringify(req.body, null, 3)
+        );
+      })
+      .catch((error) => {
+        console.error(
+          '============Failed sent the alert to tg============',
+          JSON.stringify(req.body, null, 3)
+        );
+        // res.send(error);
+      });
+  }
   // https://api.telegram.org/bot5722926850:AAFX2xfA2wJx7M6LqhT7ecZTsV2Nxk36UW4/sendMessage?chat_id=-1001160051994&text=hello
   res.json({ message: 'Thank you for the message' });
 });
