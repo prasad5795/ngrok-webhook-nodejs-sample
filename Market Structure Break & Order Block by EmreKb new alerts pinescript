@@ -101,7 +101,7 @@ f_delete_box(box_arr) =>
 if ta.change(trend) != 0 and show_zigzag
     if trend == 1
         line.new(h0i, h0, l0i, l0)
-        label.new(h0i, h0, str.tostring(h0))
+        // label.new(h0i, h0, str.tostring(h0))
         // label.new(l0i, l0, str.tostring(l0))
     if trend == -1
         line.new(l0i, l0, h0i, h0)
@@ -261,9 +261,9 @@ for bull_bb in bu_bb_boxes
 // else if  has_broken_red_zone_go_short
 
 if go_long
-    alert('{"Symbol": "' + syminfo.ticker + '", "Action": "LONG"}', alert.freq_once_per_bar_close)
+    alert('{"Symbol": "' + syminfo.tickerid + '", "Action": "LONG"}', alert.freq_once_per_bar_close)
 if go_short
-    alert('{"Symbol": "' + syminfo.ticker + '", "Action": "SHORT"}', alert.freq_once_per_bar_close)
+    alert('{"Symbol": "' + syminfo.tickerid + '", "Action": "SHORT"}', alert.freq_once_per_bar_close)
 
 
 // uncomment this testing alert for 1m chart 
