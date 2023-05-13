@@ -89,17 +89,24 @@ f_delete_box(box_arr) =>
     0
 
 
+
 [h0, h0i] = f_get_high(0)
 [h1, h1i] = f_get_high(1)
+[h2, h2i] = f_get_high(2)
 
 [l0, l0i] = f_get_low(0)
 [l1, l1i] = f_get_low(1)
+[l2, l2i] = f_get_low(2)
 
 if ta.change(trend) != 0 and show_zigzag
     if trend == 1
         line.new(h0i, h0, l0i, l0)
+        label.new(h0i, h0, str.tostring(h0))
+        // label.new(l0i, l0, str.tostring(l0))
     if trend == -1
         line.new(l0i, l0, h0i, h0)
+        // label.new(h0i, h0, str.tostring(h0))
+        // label.new(l0i, l0, str.tostring(l0))
 
 market = 1
 market := nz(market[1], 1)
@@ -144,10 +151,8 @@ for i=l1i - zigzag_len to h1i
 
 bu_bb_since = bar_index - bu_bb_index
 
-has_broken_green_zone_go_long = false
-has_broken_green_zone_go_short = false
-has_broken_red_zone_go_long = false
-has_broken_red_zone_go_short = false
+go_long=false
+go_short=false
 
 if ta.change(market) != 0
     if market == 1
@@ -174,18 +179,16 @@ for bull_ob in bu_ob_boxes
         syminfo.ticker
     else
         box.set_right(bull_ob, bar_index + 10)
-    if close > top and open < top
+    if close > top and open < top  and open < close and l1>l2 and h0>h1
         alert("Price Broke above the support(green) zone 3")
-        has_broken_green_zone_go_long:=true
-        has_broken_green_zone_go_short := false
-        has_broken_red_zone_go_long := false
-        has_broken_red_zone_go_short := false
-    else if close < bottom and open > bottom
-        alert("Price Broke above the support(green) zone 3")
-        has_broken_green_zone_go_long:=false
-        has_broken_green_zone_go_short := true
-        has_broken_red_zone_go_long := false
-        has_broken_red_zone_go_short := false
+        go_long:=true
+        go_short:=false
+    // else if close < bottom and open > bottom and close > open
+    //     alert("Price Broke above the support(green) zone 3")
+    //     has_broken_green_zone_go_long:=false
+    //     has_broken_green_zone_go_short := true
+    //     has_broken_red_zone_go_long := false
+    //     has_broken_red_zone_go_short := false
 
 for bear_ob in be_ob_boxes
     top = box.get_top(bear_ob)
@@ -196,18 +199,16 @@ for bear_ob in be_ob_boxes
         syminfo.ticker
     else
         box.set_right(bear_ob, bar_index + 10)
-    if close > top and open < top
+    // if close > top and open < top and open < close
+    //     alert("Price Broke above the support(green) zone 3")
+    //     has_broken_green_zone_go_long:=false
+    //     has_broken_green_zone_go_short := false
+    //     has_broken_red_zone_go_long := true
+    //     has_broken_red_zone_go_short := false
+    if close < bottom and open > bottom and close > open and h2>h1 and l1>l0
         alert("Price Broke above the support(green) zone 3")
-        has_broken_green_zone_go_long:=false
-        has_broken_green_zone_go_short := false
-        has_broken_red_zone_go_long := true
-        has_broken_red_zone_go_short := false
-    else if close < bottom and open > bottom
-        alert("Price Broke above the support(green) zone 3")
-        has_broken_green_zone_go_long:=false
-        has_broken_green_zone_go_short := false
-        has_broken_red_zone_go_long := false
-        has_broken_red_zone_go_short := true
+        go_long:=false
+        go_short:=true
         
 for bear_bb in be_bb_boxes
     top = box.get_top(bear_bb)
@@ -219,18 +220,16 @@ for bear_bb in be_bb_boxes
         syminfo.ticker
     else
         box.set_right(bear_bb, bar_index + 10)
-    if close > top and open < top
+    // if close > top and open < top and open < close
+    //     alert("Price Broke above the support(green) zone 3")
+    //     has_broken_green_zone_go_long:=false
+    //     has_broken_green_zone_go_short := false
+    //     has_broken_red_zone_go_long := true
+    //     has_broken_red_zone_go_short := false
+    if close < bottom and open > bottom and close > open and h2>h1 and l1>l0
         alert("Price Broke above the support(green) zone 3")
-        has_broken_green_zone_go_long:=false
-        has_broken_green_zone_go_short := false
-        has_broken_red_zone_go_long := true
-        has_broken_red_zone_go_short := false
-    else if close < bottom and open > bottom
-        alert("Price Broke above the support(green) zone 3")
-        has_broken_green_zone_go_long:=false
-        has_broken_green_zone_go_short := false
-        has_broken_red_zone_go_long := false
-        has_broken_red_zone_go_short := true
+        go_long:=false
+        go_short:=true
         
 for bull_bb in bu_bb_boxes
     bottom = box.get_bottom(bull_bb)
@@ -243,34 +242,36 @@ for bull_bb in bu_bb_boxes
         syminfo.ticker
     else
         box.set_right(bull_bb, bar_index + 10)
-    if close > top and open < top
+    if close > top and open < top  and open < close and l1>l2 and h0>h1
         alert("Price Broke above the support(green) zone 3")
-        has_broken_green_zone_go_long:=false
-        has_broken_green_zone_go_short := false
-        has_broken_red_zone_go_long := true
-        has_broken_red_zone_go_short := false
-    else if close < bottom and open > bottom
-        alert("Price Broke above the support(green) zone 3")
-        has_broken_green_zone_go_long:=false
-        has_broken_green_zone_go_short := false
-        has_broken_red_zone_go_long := false
-        has_broken_red_zone_go_short := true
+        go_long:=true
+        go_short:=false
+    // else if close < bottom and open > bottom and close > open
+    //     alert("Price Broke above the support(green) zone 3")
+    //     has_broken_green_zone_go_long:=false
+    //     has_broken_green_zone_go_short := false
+    //     has_broken_red_zone_go_long := false
+    //     has_broken_red_zone_go_short := true
 
-if has_broken_green_zone_go_long
-    alert('{"Symbol": "' + syminfo.ticker + '", "Action": "LONG"}')
-else if has_broken_red_zone_go_long
-    alert('{"Symbol": "' + syminfo.ticker + '", "Action": "LONG"}')
-else if has_broken_green_zone_go_short
-    alert('{"Symbol": "' + syminfo.ticker + '", "Action": "SHORT"}')
-else if  has_broken_red_zone_go_short
-    alert('{"Symbol": "' + syminfo.ticker + '", "Action": "SHORT"}')
+// if has_broken_green_zone_go_long
+// else if has_broken_red_zone_go_long
+//     alert('{"Symbol": "' + syminfo.ticker + '", "Action": "LONG"}', alert.freq_once_per_bar_close)
+// else if has_broken_green_zone_go_short
+//     alert('{"Symbol": "' + syminfo.ticker + '", "Action": "SHORT"}', alert.freq_once_per_bar_close)
+// else if  has_broken_red_zone_go_short
+
+if go_long
+    alert('{"Symbol": "' + syminfo.ticker + '", "Action": "LONG"}', alert.freq_once_per_bar_close)
+if go_short
+    alert('{"Symbol": "' + syminfo.ticker + '", "Action": "SHORT"}', alert.freq_once_per_bar_close)
+
 
 // uncomment this testing alert for 1m chart 
 // if close>0
 //     alert('{"Symbol": "' + syminfo.ticker + '", "Action": "TEST"}')
 
-alertcondition(has_broken_green_zone_go_long, "has_broken_green_zone_go_long","has_broken_green_zone_go_long")
-alertcondition(has_broken_green_zone_go_short, "has_broken_green_zone_go_short","has_broken_green_zone_go_short")
-alertcondition(has_broken_red_zone_go_long, "has_broken_red_zone_go_long","has_broken_red_zone_go_long")
-alertcondition(has_broken_red_zone_go_short, "has_broken_red_zone_go_short","has_broken_red_zone_go_short")
+// alertcondition(has_broken_green_zone_go_long, "has_broken_green_zone_go_long","has_broken_green_zone_go_long")
+// alertcondition(has_broken_green_zone_go_short, "has_broken_green_zone_go_short","has_broken_green_zone_go_short")
+// alertcondition(has_broken_red_zone_go_long, "has_broken_red_zone_go_long","has_broken_red_zone_go_long")
+// alertcondition(has_broken_red_zone_go_short, "has_broken_red_zone_go_short","has_broken_red_zone_go_short")
 alertcondition(ta.change(market) != 0, "MSB", "MSB")
