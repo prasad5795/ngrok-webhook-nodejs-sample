@@ -48,17 +48,4 @@ app.all('/*', function (req, res) {
 
 app.listen(port, function () {
   console.log(`Example app listening at ${port}`);
-  console.log('will start pinging render server');
-  setInterval(() => {
-    api_helper
-      .make_API_call(`https://tradingview-webhook-89ge.onrender.com`)
-      .then(() => {
-        console.log(
-          '============successfully pinged render server============'
-        );
-      })
-      .catch((error) => {
-        console.error('============Failed to ping render server============');
-      });
-  }, 60000);
 });
